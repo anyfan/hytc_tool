@@ -126,7 +126,7 @@ class GetInfo(object):
             'queryModel.sortOrder': 'asc',
             'time': '0'  # 查询次数
         }
-        res = requests.post(self, url, headers=self.headers, data=data, cookies=self.cookies)
+        res = requests.post(url, headers=self.headers, data=data, cookies=self.cookies)
         jres = res.json()
         if jres.get('items'):  # 防止数据出错items为空
             res_dict = {
@@ -137,17 +137,17 @@ class GetInfo(object):
                 'course': [{
                     'courseTitle': i['kcmc'],
                     'teacher': i['jsxm'],
-                    'courseId': i['kch_id'],
+                    # 'courseId': i['kch_id'],
                     'className': i['jxbmc'],
-                    'courseNature': ''if i.get('kcxzmc')== None else i.get('kcxzmc'),
+                    # 'courseNature': ''if i.get('kcxzmc')== None else i.get('kcxzmc'),
                     'credit': i['xf'],
                     'grade': i['cj'],
-                    'gradePoint': '' if i.get('jd') == None else i.get('jd'),
+                    # 'gradePoint': '' if i.get('jd') == None else i.get('jd'),
                     'gradeNature': i['ksxz'],
-                    'startCollege': i['kkbmmc'],
-                    'courseMark': i['kcbj'],
-                    'courseCategory': i['kclbmc'],
-                    'courseAttribution': '' if i.get('kcgsmc') == None else i.get('kcgsmc')
+                    # 'startCollege': i['kkbmmc'],
+                    'courseMark': i['kcbj']
+                    # 'courseCategory': i['kclbmc'],
+                    # 'courseAttribution': '' if i.get('kcgsmc') == None else i.get('kcgsmc')
                 } for i in jres['items']]}
             return res_dict
         else:

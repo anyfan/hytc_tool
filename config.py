@@ -3,7 +3,7 @@
 BASE_URL = 'http://jw.hytc.edu.cn/'
 
 STUDENT_INF = {
-    'student ID': '***',
+    'student_ID': '***',
     'password': '***'
 }
 
@@ -28,3 +28,7 @@ CLASS_LIST = [
     ["20:40", "21:25"]
 ]
 
+CORP = {
+    'id': '********',
+    'secrt': '************************'
+}
