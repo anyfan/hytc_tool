@@ -175,19 +175,14 @@ class GetInfo(object):
             'schoolYear': jres['xsxx']['XNM'],
             'schoolTerm': jres['xsxx']['XQMMC'],
             'normalCourse': [{
-                'courseTitle': i['kcmc'],
-                'teacher': i['xm'],
-                # 'courseId': i['kch_id'],
-                'day': i['xqj'],
-                'courseSection': i['jc'],
-                'courseWeek': i['zcd'],
-                # 'campus': i['xqmc'],
-                'courseRoom': i['cdmc']
-                # 'className': i['jxbmc'],
-                # 'hoursComposition': i['kcxszc'],
-                # 'weeklyHours': i['zhxs'],
-                # 'totalHours': i['zxs'],
-                # 'credit': i['xf']
+                'Title': i['kcmc'],
+                'Teacher': i['xm'],
+                'Day': i['xqj'],
+                'Lesson': i['jcs'],
+                'Week': i['zcd'],
+                'Address': i['cdmc'],
+                'Character':i['kcxz'],
+                'Method':i['khfsmc']
             } for i in jres['kbList']]
             # 'otherCourses': [i['qtkcgs'] for i in jres['sjkList']]
         }
@@ -272,3 +267,16 @@ class GetInfo(object):
             return res_dict
         else:
             return {}
+    
+    def get_xiaoli(self):
+        """获取校历"""
+        url = parse.urljoin(self.base_url, '/xtgl/index_cxAreaFive.html?localeKey=zh_CN&gnmkdm=index')
+        res = requests.get(url, headers=self.headers, cookies=self.cookies)
+        soup=BeautifulSoup(res.text, 'lxml')#其实这里应该可以通过查找‘至’来解析
+        data=soup.select('.table-responsive th', limit=2)[1].get_text()
+        re_da={
+            'xqs': data[11],        # 学期
+            'xnf': data[15:25],     # 学年开始年
+            'xnt': data[26:36]      # 学年结束年
+        }
+        return re_da
