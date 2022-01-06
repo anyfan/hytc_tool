@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
+
 import requests
 import json
-
 
 class WechatAlert():
     def __init__(self, corpid, corpsecret):

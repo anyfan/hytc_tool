@@ -1,5 +1,4 @@
-import datetime
-import os
+# -*- coding: utf-8 -*-
 
 class Calendar:
     """
@@ -24,16 +23,15 @@ class Calendar:
         :return:
         """
         event_text=''
-        create_time = datetime.datetime.today().strftime("%Y%m%dT%H%M%SZ")
         event_data = {
             'BEGIN': 'VEVENT',
             'CLASS': 'PUBLIC',
-            'CREATED':create_time,
+            'CREATED': DTSTAMP,
             'SUMMARY': SUMMARY,
             'DTSTAMP': DTSTAMP,
             'DTSTART;TZID=Asia/Shanghai': DTSTART,
             'DTEND;TZID=Asia/Shanghai': DTEND,
-            'LAST_MODIFIED' : create_time,
+            'LAST_MODIFIED': DTSTAMP,
             'RRULE':RRULE,
             'LOCATION': LOCATION,
             'DESCRIPTION': DESCRIPTION,
@@ -44,18 +42,20 @@ class Calendar:
         return event_text
     
     def add_event(self,da_str):
+        """将事件添加到日历"""
         self.__events[self.__event_id] = da_str
         self.__event_id += 1
         # return event_id
 
     def get_ics_text(self):
+        """获取日历ics数据"""
         self.__calendar_text = """BEGIN:VCALENDAR\nPRODID:-//ZHONG_BAI_REN//APPGENIX-SOFTWARE//\nVERSION:2.0\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-CALNAME:%s\nX-WR-TIMEZONE:null\n""" % self.calendar_name
         for value in self.__events.values():
             self.__calendar_text += value
         self.__calendar_text += "END:VCALENDAR"
         return self.__calendar_text
 
-    def save_as_ics_file(self):
-        ics_text = self.get_ics_text()
-        open("%s.ics" % self.calendar_name, "w", encoding="utf8").write(
-            ics_text)  # 使用utf8编码生成ics文件，否则日历软件打开是乱码
+    # def save_as_ics_file(self):
+    #     ics_text = self.get_ics_text()
+    #     open("%s.ics" % self.calendar_name, "w", encoding="utf8").write(
+    #         ics_text)  # 使用utf8编码生成ics文件，否则日历软件打开是乱码
