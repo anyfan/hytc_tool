@@ -16,31 +16,6 @@ class GetInfo(object):
         }
         self.cookies = cookies
 
-    # def get_pinfo(self):
-    #     """获取个人信息"""
-    #     url = parse.urljoin(self.base_url, '/xsxxxggl/xsxxwh_cxCkDgxsxx.html?gnmkdm=N100801')
-    #     res = requests.get(url, headers=self.headers, cookies=self.cookies)
-    #     jres = res.json()
-    #     res_dict = {
-    #         'name': jres['xm'],
-    #         'studentId': jres['xh'],
-    #         'brithday': jres['csrq'],
-    #         'idNumber': jres['zjhm'],
-    #         'candidateNumber': jres['ksh'],
-    #         'status': jres['xjztdm'],
-    #         'collegeName': jres['zsjg_id'],
-    #         'majorName': jres['zszyh_id'],
-    #         'className': jres['bh_id'],
-    #         'entryDate': jres['rxrq'],
-    #         'graduationSchool': jres['byzx'],
-    #         'domicile': jres['hkszd'],
-    #         'politicalStatus': jres['zzmmm'],
-    #         'national': jres['mzm'],
-    #         'education': jres['pyccdm'],
-    #         'postalCode': jres['yzbm']
-    #     }
-    #     return res_dict
-
     def get_notice(self):
         """获取通知"""
         url_0 = parse.urljoin(self.base_url, '/xtgl/index_cxNews.html?localeKey=zh_CN&gnmkdm=index')
@@ -94,14 +69,6 @@ class GetInfo(object):
         jres = res.json()
         res_list = [{'message': i['xxnr'], 'ctime': i['cjsj']} for i in jres['items']]
         return res_list
-
-    # def get_elective_list(self):
-    #     """获取选课名单信息"""
-    #     pass
-    #
-    # def get_expriment_grade(self):
-    #     """获取实验成绩信息"""
-    #     pass
 
     def get_grade(self, year, term):
         """获取成绩"""
@@ -188,40 +155,6 @@ class GetInfo(object):
         }
         return res_dict
 
-    # def get_classroom(self):
-    #     """获取空教室信息"""
-    #     url = parse.urljoin(self.base_url, '/cdjy/cdjy_cxKxcdlb.html?gnmkdm=N2155&layout=default')
-    #     data = {
-    #         'fwzt': 'cx',
-    #         'xqh_id': '1',
-    #         'xnm': '2019',
-    #         'xqm': '3',
-    #         'cdlb_id': '',
-    #         'cdejlb_id': '',
-    #         'qszws': '',
-    #         'jszws': '',
-    #         'cdmc': '',
-    #         'lh': '',
-    #         'qssd': '',
-    #         'jssd': '',
-    #         'qssj': '',
-    #         'jssj': '',
-    #         'jyfs': '0',
-    #         'cdjylx': '',
-    #         'zcd': '256',
-    #         'xqj': '3',
-    #         'jcd': '9',
-    #         '_search': 'false',
-    #         'nd': '1571744696313',
-    #         'queryModel.showCount': '50',  # 最多条数
-    #         'queryModel.currentPage': '1',
-    #         'queryModel.sortName': 'cdbh',
-    #         'queryModel.sortOrder': 'asc',
-    #         'time': '1'
-    #     }
-    #     res = requests.post(url, headers=self.headers, data=data, cookies=self.cookies)
-    #     return res
-
     def get_exam(self, year, term):
         """获取考试信息"""
         url = parse.urljoin(self.base_url, '/kwgl/kscx_cxXsksxxIndex.html?doType=query&gnmkdm=N358105')
@@ -274,9 +207,79 @@ class GetInfo(object):
         res = requests.get(url, headers=self.headers, cookies=self.cookies)
         soup=BeautifulSoup(res.text, 'lxml')#其实这里应该可以通过查找‘至’来解析
         data=soup.select('.table-responsive th', limit=2)[1].get_text()
+        # data='2021-2022学年2学期(2022-02-21至2022-07-10)'
         re_da={
-            'xqs': data[11],        # 学期
-            'xnf': data[15:25],     # 学年开始年
-            'xnt': data[26:36]      # 学年结束年
+            'xq_num': data[11],         # 学期数
+            'xn_sta': data[:4],         # 学年开始年
+            'xn_end': data[5:9],        # 学年结束年
+            'date_sta': data[15:25],    # 开学日期
+            'date_end': data[26:36]     # 放假日期
         }
         return re_da
+
+    # def get_classroom(self):
+    #     """获取空教室信息"""
+    #     url = parse.urljoin(self.base_url, '/cdjy/cdjy_cxKxcdlb.html?gnmkdm=N2155&layout=default')
+    #     data = {
+    #         'fwzt': 'cx',
+    #         'xqh_id': '1',
+    #         'xnm': '2019',
+    #         'xqm': '3',
+    #         'cdlb_id': '',
+    #         'cdejlb_id': '',
+    #         'qszws': '',
+    #         'jszws': '',
+    #         'cdmc': '',
+    #         'lh': '',
+    #         'qssd': '',
+    #         'jssd': '',
+    #         'qssj': '',
+    #         'jssj': '',
+    #         'jyfs': '0',
+    #         'cdjylx': '',
+    #         'zcd': '256',
+    #         'xqj': '3',
+    #         'jcd': '9',
+    #         '_search': 'false',
+    #         'nd': '1571744696313',
+    #         'queryModel.showCount': '50',  # 最多条数
+    #         'queryModel.currentPage': '1',
+    #         'queryModel.sortName': 'cdbh',
+    #         'queryModel.sortOrder': 'asc',
+    #         'time': '1'
+    #     }
+    #     res = requests.post(url, headers=self.headers, data=data, cookies=self.cookies)
+    #     return res
+
+    # def get_pinfo(self):
+    #     """获取个人信息"""
+    #     url = parse.urljoin(self.base_url, '/xsxxxggl/xsxxwh_cxCkDgxsxx.html?gnmkdm=N100801')
+    #     res = requests.get(url, headers=self.headers, cookies=self.cookies)
+    #     jres = res.json()
+    #     res_dict = {
+    #         'name': jres['xm'],
+    #         'studentId': jres['xh'],
+    #         'brithday': jres['csrq'],
+    #         'idNumber': jres['zjhm'],
+    #         'candidateNumber': jres['ksh'],
+    #         'status': jres['xjztdm'],
+    #         'collegeName': jres['zsjg_id'],
+    #         'majorName': jres['zszyh_id'],
+    #         'className': jres['bh_id'],
+    #         'entryDate': jres['rxrq'],
+    #         'graduationSchool': jres['byzx'],
+    #         'domicile': jres['hkszd'],
+    #         'politicalStatus': jres['zzmmm'],
+    #         'national': jres['mzm'],
+    #         'education': jres['pyccdm'],
+    #         'postalCode': jres['yzbm']
+    #     }
+    #     return res_dict
+
+    # def get_elective_list(self):
+    #     """获取选课名单信息"""
+    #     pass
+    
+    # def get_expriment_grade(self):
+    #     """获取实验成绩信息"""
+    #     pass

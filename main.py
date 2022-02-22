@@ -16,13 +16,13 @@ cal = Calendar()
 
 # 获取校历
 xl_data = person.get_xiaoli()
-kx_date = xl_data['xnf']#开学日期
+
 # 获取课表
-schedule_data = person.get_schedule(kx_date[:4], xl_data['xqs'])
+schedule_data = person.get_schedule(xl_data['xn_sta'], xl_data['xq_num'])
 schedule_data = json.dumps(schedule_data)
 # 比较缓存数据
 if (app.change_file('kb', schedule_data)):
-    ics_data = app.sch2ics(CLASS_LIST, kx_date)
+    ics_data = app.sch2ics(CLASS_LIST, xl_data['date_sta'])
     for key in ics_data:
         ev = cal.new_event(key['summary'], key['dtstamp'], key['dtstart'], key['dtend'],
                         key['rrule'], key['location'], key['description'])
